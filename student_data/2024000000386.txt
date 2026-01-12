@@ -1,0 +1,68 @@
+--- Student Information ---
+UMS Serial: 22
+Student ID: 2024000000386
+Program Name: 
+Batch: 
+Admission Session: 
+Year: 
+
+--- Personal Data ---
+Full Name: 
+Date of Birth: 
+Place of Birth: 
+Nationality: 
+NID/Passport: 
+Gender: 
+Marital Status: 
+Religion: 
+Blood Group: 
+
+--- Family/Guardian Information ---
+Father's Name: 
+Father's Occupation: 
+Father's Designation: 
+Father's Mobile: 
+Father's Email: 
+Mother's Name: 
+Mother's Occupation: 
+Mother's Designation: 
+Mother's Mobile: 
+Mother's Email: 
+Local Guardian Name: 
+Local Guardian Relationship: 
+Local Guardian Contact: 
+
+--- Address Information ---
+Present Address (House): 
+Present Address (Road): 
+Present Address (Police Station): 
+Present Address (District): 
+Permanent Address (House): 
+Permanent Address (Road): 
+Permanent Address (Police Station): 
+Permanent Address (District): 
+
+--- Financial & Emergency Information ---
+Monthly Family Income: 
+Emergency Contact Name: 
+Emergency Contact Relation: 
+Emergency Contact Address: 
+Emergency Contact Mobile: 
+
+--- SSC Details ---
+Institution: 
+Roll: 
+GPA: 
+Scale: 
+Group: 
+Board: 
+Passing Year: 
+
+--- HSC Details ---
+Institution: 
+Roll: 
+GPA: 
+Scale: 
+Group: 
+Board: 
+Passing Year: 
