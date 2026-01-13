@@ -299,6 +299,7 @@ public class AddNewStudentForm extends JFrame {
             return;
         }
 
+        // Student Information
         umsSerial.setText(student.getUmsSerial());
         studentId.setText(student.getStudentId());
         programName.setText(student.getProgramName());
@@ -310,7 +311,26 @@ public class AddNewStudentForm extends JFrame {
             else if (session.equals("Fall")) fall.setSelected(true);
         }
         year.setSelectedItem(student.getYear());
+        
+        // Personal Data
         fullName.setText(student.getFullName());
+        nidOrPassport.setText(student.getNidOrPassport());
+        if (student.getGender() != null) gender.setSelectedItem(student.getGender());
+        if (student.getMaritalStatus() != null) maritalStatus.setSelectedItem(student.getMaritalStatus());
+        if (student.getReligion() != null) religion.setSelectedItem(student.getReligion());
+        if (student.getBloodGroup() != null) bloodGroup.setSelectedItem(student.getBloodGroup());
+        
+        // Family/Guardian Information
+        fatherName.setText(student.getFatherName());
+        fatherOccupation.setText(student.getFatherOccupation());
+        fatherMobile.setText(student.getFatherMobile());
+        motherName.setText(student.getMotherName());
+        motherOccupation.setText(student.getMotherOccupation());
+        motherMobile.setText(student.getMotherMobile());
+        
+        // Address Information
+        presentAddress.setText(student.getPresentAddress());
+        permanentAddress.setText(student.getPermanentAddress());
     }
 
 }
