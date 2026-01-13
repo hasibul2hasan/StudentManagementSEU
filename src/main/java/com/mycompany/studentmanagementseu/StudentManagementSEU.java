@@ -17,6 +17,19 @@ class Student {
     private String admissionSession;
     private String year;
     private String fullName;
+    private String nidOrPassport;
+    private String gender;
+    private String maritalStatus;
+    private String religion;
+    private String bloodGroup;
+    private String fatherName;
+    private String fatherOccupation;
+    private String fatherMobile;
+    private String motherName;
+    private String motherOccupation;
+    private String motherMobile;
+    private String presentAddress;
+    private String permanentAddress;
 
     public Student(String studentId, String fullName, String programName) {
         this.studentId = studentId;
@@ -39,6 +52,32 @@ class Student {
     public void setYear(String year) { this.year = year; }
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getNidOrPassport() { return nidOrPassport; }
+    public void setNidOrPassport(String nidOrPassport) { this.nidOrPassport = nidOrPassport; }
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
+    public String getMaritalStatus() { return maritalStatus; }
+    public void setMaritalStatus(String maritalStatus) { this.maritalStatus = maritalStatus; }
+    public String getReligion() { return religion; }
+    public void setReligion(String religion) { this.religion = religion; }
+    public String getBloodGroup() { return bloodGroup; }
+    public void setBloodGroup(String bloodGroup) { this.bloodGroup = bloodGroup; }
+    public String getFatherName() { return fatherName; }
+    public void setFatherName(String fatherName) { this.fatherName = fatherName; }
+    public String getFatherOccupation() { return fatherOccupation; }
+    public void setFatherOccupation(String fatherOccupation) { this.fatherOccupation = fatherOccupation; }
+    public String getFatherMobile() { return fatherMobile; }
+    public void setFatherMobile(String fatherMobile) { this.fatherMobile = fatherMobile; }
+    public String getMotherName() { return motherName; }
+    public void setMotherName(String motherName) { this.motherName = motherName; }
+    public String getMotherOccupation() { return motherOccupation; }
+    public void setMotherOccupation(String motherOccupation) { this.motherOccupation = motherOccupation; }
+    public String getMotherMobile() { return motherMobile; }
+    public void setMotherMobile(String motherMobile) { this.motherMobile = motherMobile; }
+    public String getPresentAddress() { return presentAddress; }
+    public void setPresentAddress(String presentAddress) { this.presentAddress = presentAddress; }
+    public String getPermanentAddress() { return permanentAddress; }
+    public void setPermanentAddress(String permanentAddress) { this.permanentAddress = permanentAddress; }
 
     @Override
     public String toString() {
@@ -65,6 +104,21 @@ class DataStorage {
             writer.write("Year: " + student.getYear() + "\n\n");
             writer.write("--- Personal Data ---\n");
             writer.write("Full Name: " + student.getFullName() + "\n");
+            writer.write("NID/Passport: " + student.getNidOrPassport() + "\n");
+            writer.write("Gender: " + student.getGender() + "\n");
+            writer.write("Marital Status: " + student.getMaritalStatus() + "\n");
+            writer.write("Religion: " + student.getReligion() + "\n");
+            writer.write("Blood Group: " + student.getBloodGroup() + "\n\n");
+            writer.write("--- Family/Guardian Information ---\n");
+            writer.write("Father's Name: " + student.getFatherName() + "\n");
+            writer.write("Occupation: " + student.getFatherOccupation() + "\n");
+            writer.write("Mobile: " + student.getFatherMobile() + "\n");
+            writer.write("Mother's Name: " + student.getMotherName() + "\n");
+            writer.write("Occupation: " + student.getMotherOccupation() + "\n");
+            writer.write("Mobile: " + student.getMotherMobile() + "\n\n");
+            writer.write("--- Address Information ---\n");
+            writer.write("Present Address: " + student.getPresentAddress() + "\n");
+            writer.write("Permanent Address: " + student.getPermanentAddress() + "\n");
         }
     }
 
@@ -112,6 +166,19 @@ class DataStorage {
             String batch = "";
             String admissionSession = "";
             String year = "";
+            String nidOrPassport = "";
+            String gender = "";
+            String maritalStatus = "";
+            String religion = "";
+            String bloodGroup = "";
+            String fatherName = "";
+            String fatherOccupation = "";
+            String fatherMobile = "";
+            String motherName = "";
+            String motherOccupation = "";
+            String motherMobile = "";
+            String presentAddress = "";
+            String permanentAddress = "";
 
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -129,6 +196,32 @@ class DataStorage {
                     admissionSession = line.substring("Admission Session: ".length());
                 } else if (line.startsWith("Year: ")) {
                     year = line.substring("Year: ".length());
+                } else if (line.startsWith("NID/Passport: ")) {
+                    nidOrPassport = line.substring("NID/Passport: ".length());
+                } else if (line.startsWith("Gender: ")) {
+                    gender = line.substring("Gender: ".length());
+                } else if (line.startsWith("Marital Status: ")) {
+                    maritalStatus = line.substring("Marital Status: ".length());
+                } else if (line.startsWith("Religion: ")) {
+                    religion = line.substring("Religion: ".length());
+                } else if (line.startsWith("Blood Group: ")) {
+                    bloodGroup = line.substring("Blood Group: ".length());
+                } else if (line.startsWith("Father's Name: ")) {
+                    fatherName = line.substring("Father's Name: ".length());
+                } else if (line.startsWith("Occupation: ") && scanner.hasNextLine()) { // Assuming occupation follows father's name
+                    fatherOccupation = line.substring("Occupation: ".length());
+                } else if (line.startsWith("Mobile: ") && scanner.hasNextLine()) { // Assuming mobile follows father's occupation
+                    fatherMobile = line.substring("Mobile: ".length());
+                } else if (line.startsWith("Mother's Name: ")) {
+                    motherName = line.substring("Mother's Name: ".length());
+                } else if (line.startsWith("Occupation: ")) { // This will be mother's occupation
+                    motherOccupation = line.substring("Occupation: ".length());
+                } else if (line.startsWith("Mobile: ")) { // This will be mother's mobile
+                    motherMobile = line.substring("Mobile: ".length());
+                } else if (line.startsWith("Present Address: ")) {
+                    presentAddress = line.substring("Present Address: ".length());
+                } else if (line.startsWith("Permanent Address: ")) {
+                    permanentAddress = line.substring("Permanent Address: ".length());
                 }
             }
             if (!id.isEmpty()) {
@@ -137,6 +230,19 @@ class DataStorage {
                 student.setBatch(batch);
                 student.setAdmissionSession(admissionSession);
                 student.setYear(year);
+                student.setNidOrPassport(nidOrPassport);
+                student.setGender(gender);
+                student.setMaritalStatus(maritalStatus);
+                student.setReligion(religion);
+                student.setBloodGroup(bloodGroup);
+                student.setFatherName(fatherName);
+                student.setFatherOccupation(fatherOccupation);
+                student.setFatherMobile(fatherMobile);
+                student.setMotherName(motherName);
+                student.setMotherOccupation(motherOccupation);
+                student.setMotherMobile(motherMobile);
+                student.setPresentAddress(presentAddress);
+                student.setPermanentAddress(permanentAddress);
                 return student;
             }
         } catch (IOException e) {

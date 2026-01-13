@@ -1,13 +1,13 @@
 --- Student Information ---
-UMS Serial: 6
-Student ID: 2024000000386
+UMS Serial: 7
+Student ID: 2024000000000
 Program Name: cse
 Batch: 66
 Admission Session: Summer
-Year: 2023
+Year: 2025
 
 --- Personal Data ---
-Full Name: aaaaaa
+Full Name: a
 NID/Passport: null
 Gender: null
 Marital Status: null

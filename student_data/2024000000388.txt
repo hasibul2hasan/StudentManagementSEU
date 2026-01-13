@@ -1,0 +1,10 @@
+--- Student Information ---
+UMS Serial: 5
+Student ID: 2024000000388
+Program Name: cse
+Batch: 66
+Admission Session: Summer
+Year: 2022
+
+--- Personal Data ---
+Full Name: gg

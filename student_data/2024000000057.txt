@@ -1,0 +1,27 @@
+--- Student Information ---
+UMS Serial: 6
+Student ID: 2024000000057
+Program Name: CSE
+Batch: 66
+Admission Session: Summer
+Year: 2023
+
+--- Personal Data ---
+Full Name: Ratul
+NID/Passport: a
+Gender: Male
+Marital Status: Single
+Religion: Islam
+Blood Group: A+
+
+--- Family/Guardian Information ---
+Father's Name: a
+Occupation: a
+Mobile: a
+Mother's Name: a
+Occupation: a
+Mobile: a
+
+--- Address Information ---
+Present Address: a
+Permanent Address: a

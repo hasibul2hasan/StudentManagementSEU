@@ -243,7 +243,18 @@ public class AddNewStudentForm extends JFrame {
             return;
         }
 
-        Student student = new Student(studentId.getText(), fullName.getText(), programName.getText());
+        String currentStudentId = studentId.getText().trim();
+
+        // Check if student ID already exists only when adding a new student
+        if (studentIdToEdit == null) {
+            File studentFile = new File("student_data/" + currentStudentId + ".txt");
+            if (studentFile.exists()) {
+                JOptionPane.showMessageDialog(this, "Student ID already exists.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        Student student = new Student(currentStudentId, fullName.getText(), programName.getText());
         student.setUmsSerial(umsSerial.getText());
         student.setBatch(batch.getText());
         if (sprint.isSelected()) {
@@ -254,6 +265,25 @@ public class AddNewStudentForm extends JFrame {
             student.setAdmissionSession("Fall");
         }
         student.setYear((String) year.getSelectedItem());
+
+        // Personal Data
+        student.setNidOrPassport(nidOrPassport.getText());
+        student.setGender((String) gender.getSelectedItem());
+        student.setMaritalStatus((String) maritalStatus.getSelectedItem());
+        student.setReligion((String) religion.getSelectedItem());
+        student.setBloodGroup((String) bloodGroup.getSelectedItem());
+
+        // Family/Guardian
+        student.setFatherName(fatherName.getText());
+        student.setFatherOccupation(fatherOccupation.getText());
+        student.setFatherMobile(fatherMobile.getText());
+        student.setMotherName(motherName.getText());
+        student.setMotherOccupation(motherOccupation.getText());
+        student.setMotherMobile(motherMobile.getText());
+
+        // Addresses
+        student.setPresentAddress(presentAddress.getText());
+        student.setPermanentAddress(permanentAddress.getText());
         
         DataStorage.saveStudent(student);
 
