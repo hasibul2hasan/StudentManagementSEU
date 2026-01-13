@@ -24,12 +24,24 @@ public class StudentManagementSEU extends JFrame {
 
         add(panel);
 
-        addStudentButton.addActionListener(e -> new AddNewStudentForm().setVisible(true));
+        addStudentButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                new AddNewStudentForm().setVisible(true);
+            }
+        });
 
-        viewStudentsButton.addActionListener(e -> new ViewStudentsForm().setVisible(true));
+        viewStudentsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                new ViewStudentsForm().setVisible(true);
+            }
+        });
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new StudentManagementSEU().setVisible(true));
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new StudentManagementSEU().setVisible(true);
+            }
+        });
     }
 }

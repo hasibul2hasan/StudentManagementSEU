@@ -1,19 +1,19 @@
 --- Student Information ---
-UMS Serial: 22
-Student ID: 2024000000387
-Program Name: 4
+UMS Serial: 5
+Student ID: 2024000000486
+Program Name: CSE
 Batch: 66
 Admission Session: Summer
-Year: 2020
+Year: 2025
 
 --- Personal Data ---
-Full Name: Md Hasibul
+Full Name: Md Hasibul Hasan Khondaker
 Place of Birth: 
-NID/Passport: 
+NID/Passport: 1212331233
 Gender: Male
 Marital Status: Single
 Religion: Islam
-Blood Group: A+
+Blood Group: B+
 
 --- Family/Guardian Information ---
 Father's Name: 
@@ -24,6 +24,6 @@ Mother's Occupation:
 Mother's Mobile: 
 
 --- Address Information ---
-Present Address: a
+Present Address: 
 Permanent Address: 
 

@@ -47,13 +47,21 @@ public class ViewStudentsForm extends JFrame {
             }
         }
 
-        searchButton.addActionListener(e -> filterStudents());
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                filterStudents();
+            }
+        });
 
         JScrollPane scrollPane = new JScrollPane(studentListPanel);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Student IDs"));
 
         JButton backButton = new JButton("Go Back");
-        backButton.addActionListener(e -> dispose());
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                dispose();
+            }
+        });
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
