@@ -3,10 +3,7 @@ package com.mycompany.studentmanagementseu;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
 
 public class AddNewStudentForm extends JFrame {
 
@@ -70,10 +67,12 @@ public class AddNewStudentForm extends JFrame {
             }
         });
 
-        // Add save functionality here
-        addStudent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
+        addStudent.addActionListener(e -> {
+            try {
                 saveStudentData();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error saving student data: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
             }
         });
 
@@ -237,168 +236,51 @@ public class AddNewStudentForm extends JFrame {
         return "";
     }
 
-    private void saveStudentData() {
-        String admissionSession = getSelectedAdmissionSession();
-
-        if (studentId.getText().trim().isEmpty() ||
-            programName.getText().trim().isEmpty() ||
-            batch.getText().trim().isEmpty() ||
-            admissionSession.isEmpty() ||
-            year.getSelectedItem().toString().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "All Student Information fields must be filled out.", "Error", JOptionPane.ERROR_MESSAGE);
+    private void saveStudentData() throws IOException {
+        // Basic validation
+        if (studentId.getText().trim().isEmpty() || fullName.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Student ID and Full Name are required.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        String id = studentId.getText().trim();
-
-        if (!id.matches("\\d{13}")) {
-            JOptionPane.showMessageDialog(this, "Student ID must be 13 digits and contain only numbers.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+        Student student = new Student(studentId.getText(), fullName.getText(), programName.getText());
+        student.setUmsSerial(umsSerial.getText());
+        student.setBatch(batch.getText());
+        if (sprint.isSelected()) {
+            student.setAdmissionSession("Sprint");
+        } else if (summer.isSelected()) {
+            student.setAdmissionSession("Summer");
+        } else if (fall.isSelected()) {
+            student.setAdmissionSession("Fall");
         }
+        student.setYear((String) year.getSelectedItem());
+        
+        DataStorage.saveStudent(student);
 
-        String batchNumber = batch.getText().trim();
-        if (!batchNumber.matches("\\d+")) {
-            JOptionPane.showMessageDialog(this, "Batch must contain only numbers.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        String fullNameText = fullName.getText().trim();
-        if (fullNameText.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Full Name cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if (fullNameText.matches(".*\\d.*")) {
-            JOptionPane.showMessageDialog(this, "Full Name cannot contain numbers.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        String fatherNameText = fatherName.getText().trim();
-        if (fatherNameText.matches(".*\\d.*")) {
-            JOptionPane.showMessageDialog(this, "Father's Name cannot contain numbers.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        String motherNameText = motherName.getText().trim();
-        if (motherNameText.matches(".*\\d.*")) {
-            JOptionPane.showMessageDialog(this, "Mother's Name cannot contain numbers.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        String fatherMobileText = fatherMobile.getText().trim();
-        if (!fatherMobileText.matches("\\d*")) {
-            JOptionPane.showMessageDialog(this, "Father's Mobile can only contain numbers.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        String motherMobileText = motherMobile.getText().trim();
-        if (!motherMobileText.matches("\\d*")) {
-            JOptionPane.showMessageDialog(this, "Mother's Mobile can only contain numbers.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        File dataDir = new File("student_data");
-        if (!dataDir.exists()) {
-            dataDir.mkdirs();
-        }
-
-        if (studentIdToEdit == null) { // Only check for new students
-            File studentFileCheck = new File(dataDir, id + ".txt");
-            if (studentFileCheck.exists()) {
-                JOptionPane.showMessageDialog(this, "Student with ID " + id + " already exists.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
-
-        File studentFile = new File(dataDir, id + ".txt");
-
-        try (FileWriter writer = new FileWriter(studentFile)) {
-            writer.write("--- Student Information ---\n");
-            writer.write("UMS Serial: " + umsSerial.getText() + "\n");
-            writer.write("Student ID: " + studentId.getText() + "\n");
-            writer.write("Program Name: " + programName.getText() + "\n");
-            writer.write("Batch: " + batch.getText() + "\n");
-            writer.write("Admission Session: " + getSelectedAdmissionSession() + "\n");
-            writer.write("Year: " + year.getSelectedItem().toString() + "\n\n");
-
-            writer.write("--- Personal Data ---\n");
-            writer.write("Full Name: " + fullName.getText() + "\n");
-            
-            writer.write("Gender: " + gender.getSelectedItem().toString() + "\n");
-            writer.write("Marital Status: " + maritalStatus.getSelectedItem().toString() + "\n");
-            writer.write("Religion: " + religion.getSelectedItem().toString() + "\n");
-            writer.write("Blood Group: " + bloodGroup.getSelectedItem().toString() + "\n\n");
-
-            writer.write("--- Family/Guardian Information ---\n");
-            writer.write("Father's Name: " + fatherName.getText() + "\n");
-            writer.write("Father's Occupation: " + fatherOccupation.getText() + "\n");
-            writer.write("Father's Mobile: " + fatherMobile.getText() + "\n");
-            writer.write("Mother's Name: " + motherName.getText() + "\n");
-            writer.write("Mother's Occupation: " + motherOccupation.getText() + "\n");
-            writer.write("Mother's Mobile: " + motherMobile.getText() + "\n\n");
-
-            writer.write("--- Address Information ---\n");
-            writer.write("Present Address: " + presentAddress.getText() + "\n");
-            writer.write("Permanent Address: " + permanentAddress.getText() + "\n\n");
-
-            if (studentIdToEdit != null) {
-                JOptionPane.showMessageDialog(this, "Student data updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Student data saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            }
-            dispose();
-
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error saving student data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        JOptionPane.showMessageDialog(this, "Student data saved successfully!");
+        dispose();
     }
 
     private void loadStudentData(String studentIdToLoad) {
-        File studentFile = new File("student_data", studentIdToLoad + ".txt");
-        if (!studentFile.exists()) {
+        Student student = DataStorage.loadStudent(studentIdToLoad);
+        if (student == null) {
             JOptionPane.showMessageDialog(this, "Student data file not found!", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
             return;
         }
 
-        try {
-            List<String> lines = Files.readAllLines(studentFile.toPath());
-            for (String line : lines) {
-                String[] parts = line.split(": ", 2);
-                if (parts.length < 2) continue;
-                String key = parts[0].trim();
-                String value = parts[1].trim();
-
-                switch (key) {
-                    case "UMS Serial": umsSerial.setText(value); break;
-                    case "Student ID": studentId.setText(value); break;
-                    case "Program Name": programName.setText(value); break;
-                    case "Batch": batch.setText(value); break;
-                    case "Admission Session":
-                        if (value.equals("Sprint")) sprint.setSelected(true);
-                        else if (value.equals("Summer")) summer.setSelected(true);
-                        else if (value.equals("Fall")) fall.setSelected(true);
-                        break;
-                    case "Year": year.setSelectedItem(value); break;
-                    case "Full Name": fullName.setText(value); break;
-                    case "Gender": gender.setSelectedItem(value); break;
-                    case "Marital Status": maritalStatus.setSelectedItem(value); break;
-                    case "Religion": religion.setSelectedItem(value); break;
-                    case "Blood Group": bloodGroup.setSelectedItem(value); break;
-                    case "Father's Name": fatherName.setText(value); break;
-                    case "Father's Occupation": fatherOccupation.setText(value); break;
-                    case "Father's Mobile": fatherMobile.setText(value); break;
-                    case "Mother's Name": motherName.setText(value); break;
-                    case "Mother's Occupation": motherOccupation.setText(value); break;
-                    case "Mother's Mobile": motherMobile.setText(value); break;
-                    case "Present Address": presentAddress.setText(value); break;
-                    case "Permanent Address": permanentAddress.setText(value); break;
-                }
-            }
-
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error loading student data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        umsSerial.setText(student.getUmsSerial());
+        studentId.setText(student.getStudentId());
+        programName.setText(student.getProgramName());
+        batch.setText(student.getBatch());
+        String session = student.getAdmissionSession();
+        if (session != null) {
+            if (session.equals("Sprint")) sprint.setSelected(true);
+            else if (session.equals("Summer")) summer.setSelected(true);
+            else if (session.equals("Fall")) fall.setSelected(true);
         }
+        year.setSelectedItem(student.getYear());
+        fullName.setText(student.getFullName());
     }
 
 }
