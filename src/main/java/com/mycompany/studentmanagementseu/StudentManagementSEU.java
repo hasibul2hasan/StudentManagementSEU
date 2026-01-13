@@ -3,8 +3,6 @@ package com.mycompany.studentmanagementseu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class StudentManagementSEU extends JFrame {
 
@@ -26,28 +24,12 @@ public class StudentManagementSEU extends JFrame {
 
         add(panel);
 
-        addStudentButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                new AddNewStudentForm().setVisible(true);
-            }
-        });
+        addStudentButton.addActionListener(e -> new AddNewStudentForm().setVisible(true));
 
-        viewStudentsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new ViewStudentsForm().setVisible(true);
-            }
-        });
+        viewStudentsButton.addActionListener(e -> new ViewStudentsForm().setVisible(true));
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new StudentManagementSEU().setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> new StudentManagementSEU().setVisible(true));
     }
 }

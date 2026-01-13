@@ -1,21 +1,21 @@
 --- Student Information ---
 UMS Serial: 22
 Student ID: 2024000000387
-Program Name: 
-Batch: 
-Admission Session: 
-Year: 
+Program Name: 4
+Batch: 66
+Admission Session: Summer
+Year: 2020
 
 --- Personal Data ---
-Full Name: 
-Date of Birth: 
+Full Name: a
+Date of Birth: 1 January 2010
 Place of Birth: 
 Nationality: 
 NID/Passport: 
-Gender: 
-Marital Status: 
-Religion: 
-Blood Group: 
+Gender: Male
+Marital Status: Single
+Religion: Islam
+Blood Group: A+
 
 --- Family/Guardian Information ---
 Father's Name: 

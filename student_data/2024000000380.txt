@@ -1,13 +1,13 @@
 --- Student Information ---
-UMS Serial: 22
-Student ID: 202400000031
-Program Name: 
-Batch: 
-Admission Session: 
-Year: 
+UMS Serial: 5
+Student ID: 2024000000380
+Program Name: BSC in CSE
+Batch: 66
+Admission Session: Summer
+Year: 2023
 
 --- Personal Data ---
-Full Name: 
+Full Name: Md Hasibul Hasan Khondaker
 Date of Birth: 
 Place of Birth: 
 Nationality: 

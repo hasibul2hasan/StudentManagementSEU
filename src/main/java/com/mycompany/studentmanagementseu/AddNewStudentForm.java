@@ -2,11 +2,12 @@ package com.mycompany.studentmanagementseu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AddNewStudentForm extends JFrame {
 
@@ -18,7 +19,8 @@ public class AddNewStudentForm extends JFrame {
     private ButtonGroup admissionSessionGroup;
 
     // Personal Data
-    private JTextField fullName, dateOfBirth, placeOfBirth, nationality, nidOrPassport, gender, maritalStatus, religion, bloodGroup;
+    private JTextField fullName, dateOfBirth, placeOfBirth, nationality, nidOrPassport;
+    private JComboBox<String> gender, maritalStatus, religion, bloodGroup;
 
     // Family/Guardian
     private JTextField fatherName, fatherOccupation, fatherDesignation, fatherMobile, fatherEmail;
@@ -36,8 +38,19 @@ public class AddNewStudentForm extends JFrame {
     private JTextField sscInstitution, sscRoll, sscGpa, sscScale, sscGroup, sscBoard, sscPassingYear;
     private JTextField hscInstitution, hscRoll, hscGpa, hscScale, hscGroup, hscBoard, hscPassingYear;
 
+    private String studentIdToEdit;
+
     public AddNewStudentForm() {
-        setTitle("Add New Student");
+        this(null);
+    }
+
+    public AddNewStudentForm(String studentIdToEdit) {
+        this.studentIdToEdit = studentIdToEdit;
+        if (studentIdToEdit != null) {
+            setTitle("Edit Student");
+        } else {
+            setTitle("Add New Student");
+        }
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -59,15 +72,12 @@ public class AddNewStudentForm extends JFrame {
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton addStudent = new JButton("Add Student");
-        JButton clearButton = new JButton("Clear");
         JButton backButton = new JButton("Go Back");
 
         buttonPanel.add(addStudent);
-        buttonPanel.add(clearButton);
         buttonPanel.add(backButton);
 
         backButton.addActionListener(e -> dispose());
-        clearButton.addActionListener(e -> clearForm());
 
         // Add save functionality here
         addStudent.addActionListener(e -> {
@@ -77,6 +87,11 @@ public class AddNewStudentForm extends JFrame {
         setLayout(new BorderLayout());
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
+
+        if (studentIdToEdit != null) {
+            loadStudentData(studentIdToEdit);
+            studentId.setEditable(false);
+        }
     }
 
     private JPanel createSystemInfoPanel() {
@@ -138,10 +153,18 @@ public class AddNewStudentForm extends JFrame {
         placeOfBirth = new JTextField(20);
         nationality = new JTextField(20);
         nidOrPassport = new JTextField(20);
-        gender = new JTextField(20);
-        maritalStatus = new JTextField(20);
-        religion = new JTextField(20);
-        bloodGroup = new JTextField(20);
+
+        String[] genders = {"Male", "Female", "Other"};
+        gender = new JComboBox<>(genders);
+
+        String[] maritalStatuses = {"Single", "Married", "Divorced", "Widowed"};
+        maritalStatus = new JComboBox<>(maritalStatuses);
+
+        String[] religions = {"Islam", "Hinduism", "Christianity", "Buddhism", "Other"};
+        religion = new JComboBox<>(religions);
+
+        String[] bloodGroups = {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
+        bloodGroup = new JComboBox<>(bloodGroups);
 
         addLabelAndField(panel, "Full Name:", fullName, gbc);
         addLabelAndField(panel, "Date of Birth:", dateOfBirth, gbc);
@@ -328,17 +351,31 @@ public class AddNewStudentForm extends JFrame {
             return;
         }
 
+        String fullNameText = fullName.getText().trim();
+        if (fullNameText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Full Name cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (fullNameText.matches(".*\\d.*")) {
+            JOptionPane.showMessageDialog(this, "Full Name cannot contain numbers.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         File dataDir = new File("student_data");
         if (!dataDir.exists()) {
             dataDir.mkdirs();
         }
 
-        File studentFile = new File(dataDir, id + ".txt");
-
-        if (studentFile.exists()) {
-            JOptionPane.showMessageDialog(this, "Student with ID " + id + " already exists.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+        if (studentIdToEdit == null) { // Only check for new students
+            File studentFileCheck = new File(dataDir, id + ".txt");
+            if (studentFileCheck.exists()) {
+                JOptionPane.showMessageDialog(this, "Student with ID " + id + " already exists.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         }
+
+        File studentFile = new File(dataDir, id + ".txt");
 
         try (FileWriter writer = new FileWriter(studentFile)) {
             writer.write("--- Student Information ---\n");
@@ -355,10 +392,10 @@ public class AddNewStudentForm extends JFrame {
             writer.write("Place of Birth: " + placeOfBirth.getText() + "\n");
             writer.write("Nationality: " + nationality.getText() + "\n");
             writer.write("NID/Passport: " + nidOrPassport.getText() + "\n");
-            writer.write("Gender: " + gender.getText() + "\n");
-            writer.write("Marital Status: " + maritalStatus.getText() + "\n");
-            writer.write("Religion: " + religion.getText() + "\n");
-            writer.write("Blood Group: " + bloodGroup.getText() + "\n\n");
+            writer.write("Gender: " + gender.getSelectedItem().toString() + "\n");
+            writer.write("Marital Status: " + maritalStatus.getSelectedItem().toString() + "\n");
+            writer.write("Religion: " + religion.getSelectedItem().toString() + "\n");
+            writer.write("Blood Group: " + bloodGroup.getSelectedItem().toString() + "\n\n");
 
             writer.write("--- Family/Guardian Information ---\n");
             writer.write("Father's Name: " + fatherName.getText() + "\n");
@@ -410,7 +447,11 @@ public class AddNewStudentForm extends JFrame {
             writer.write("Board: " + hscBoard.getText() + "\n");
             writer.write("Passing Year: " + hscPassingYear.getText() + "\n");
 
-            JOptionPane.showMessageDialog(this, "Student data saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            if (studentIdToEdit != null) {
+                JOptionPane.showMessageDialog(this, "Student data updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Student data saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
             dispose();
 
         } catch (IOException e) {
@@ -418,17 +459,110 @@ public class AddNewStudentForm extends JFrame {
         }
     }
 
-    private void clearForm() {
-        for (Component comp : ((JPanel) getContentPane().getComponent(0)).getComponents()) {
-            if (comp instanceof JPanel) {
-                for (Component innerComp : ((JPanel) comp).getComponents()) {
-                    if (innerComp instanceof JTextField) {
-                        ((JTextField) innerComp).setText("");
-                    }
+    private void loadStudentData(String studentIdToLoad) {
+        File studentFile = new File("student_data", studentIdToLoad + ".txt");
+        if (!studentFile.exists()) {
+            JOptionPane.showMessageDialog(this, "Student data file not found!", "Error", JOptionPane.ERROR_MESSAGE);
+            dispose();
+            return;
+        }
+
+        try {
+            List<String> lines = Files.readAllLines(studentFile.toPath());
+            for (String line : lines) {
+                String[] parts = line.split(": ", 2);
+                if (parts.length < 2) continue;
+                String key = parts[0].trim();
+                String value = parts[1].trim();
+
+                switch (key) {
+                    case "UMS Serial": umsSerial.setText(value); break;
+                    case "Student ID": studentId.setText(value); break;
+                    case "Program Name": programName.setText(value); break;
+                    case "Batch": batch.setText(value); break;
+                    case "Admission Session":
+                        if (value.equals("Sprint")) sprint.setSelected(true);
+                        else if (value.equals("Summer")) summer.setSelected(true);
+                        else if (value.equals("Fall")) fall.setSelected(true);
+                        break;
+                    case "Year": year.setSelectedItem(value); break;
+                    case "Full Name": fullName.setText(value); break;
+                    case "Date of Birth": dateOfBirth.setText(value); break;
+                    case "Place of Birth": placeOfBirth.setText(value); break;
+                    case "Nationality": nationality.setText(value); break;
+                    case "NID/Passport": nidOrPassport.setText(value); break;
+                    case "Gender": gender.setSelectedItem(value); break;
+                    case "Marital Status": maritalStatus.setSelectedItem(value); break;
+                    case "Religion": religion.setSelectedItem(value); break;
+                    case "Blood Group": bloodGroup.setSelectedItem(value); break;
+                    case "Father's Name": fatherName.setText(value); break;
+                    case "Father's Occupation": fatherOccupation.setText(value); break;
+                    case "Father's Designation": fatherDesignation.setText(value); break;
+                    case "Father's Mobile": fatherMobile.setText(value); break;
+                    case "Father's Email": fatherEmail.setText(value); break;
+                    case "Mother's Name": motherName.setText(value); break;
+                    case "Mother's Occupation": motherOccupation.setText(value); break;
+                    case "Mother's Designation": motherDesignation.setText(value); break;
+                    case "Mother's Mobile": motherMobile.setText(value); break;
+                    case "Mother's Email": motherEmail.setText(value); break;
+                    case "Local Guardian Name": localGuardianName.setText(value); break;
+                    case "Local Guardian Relationship": localGuardianRelationship.setText(value); break;
+                    case "Local Guardian Contact": localGuardianContact.setText(value); break;
+                    case "Present Address (House)": presentAddressHouse.setText(value); break;
+                    case "Present Address (Road)": presentAddressRoad.setText(value); break;
+                    case "Present Address (Police Station)": presentAddressPS.setText(value); break;
+                    case "Present Address (District)": presentAddressDistrict.setText(value); break;
+                    case "Permanent Address (House)": permanentAddressHouse.setText(value); break;
+                    case "Permanent Address (Road)": permanentAddressRoad.setText(value); break;
+                    case "Permanent Address (Police Station)": permanentAddressPS.setText(value); break;
+                    case "Permanent Address (District)": permanentAddressDistrict.setText(value); break;
+                    case "Monthly Family Income": monthlyFamilyIncome.setText(value); break;
+                    case "Emergency Contact Name": emergencyContactName.setText(value); break;
+                    case "Emergency Contact Relation": emergencyContactRelation.setText(value); break;
+                    case "Emergency Contact Address": emergencyContactAddress.setText(value); break;
+                    case "Emergency Contact Mobile": emergencyContactMobile.setText(value); break;
                 }
             }
+
+            // Separate logic for education details as they are in sections
+            List<String> sscLines = lines.stream().dropWhile(l -> !l.equals("--- SSC Details ---")).skip(1).takeWhile(l -> !l.equals("--- HSC Details ---")).collect(Collectors.toList());
+            List<String> hscLines = lines.stream().dropWhile(l -> !l.equals("--- HSC Details ---")).skip(1).collect(Collectors.toList());
+
+            for (String line : sscLines) {
+                String[] parts = line.split(": ", 2);
+                 if (parts.length < 2) continue;
+                String key = parts[0].trim();
+                String value = parts[1].trim();
+                switch (key) {
+                    case "Institution": sscInstitution.setText(value); break;
+                    case "Roll": sscRoll.setText(value); break;
+                    case "GPA": sscGpa.setText(value); break;
+                    case "Scale": sscScale.setText(value); break;
+                    case "Group": sscGroup.setText(value); break;
+                    case "Board": sscBoard.setText(value); break;
+                    case "Passing Year": sscPassingYear.setText(value); break;
+                }
+            }
+
+            for (String line : hscLines) {
+                String[] parts = line.split(": ", 2);
+                 if (parts.length < 2) continue;
+                String key = parts[0].trim();
+                String value = parts[1].trim();
+                switch (key) {
+                    case "Institution": hscInstitution.setText(value); break;
+                    case "Roll": hscRoll.setText(value); break;
+                    case "GPA": hscGpa.setText(value); break;
+                    case "Scale": hscScale.setText(value); break;
+                    case "Group": hscGroup.setText(value); break;
+                    case "Board": hscBoard.setText(value); break;
+                    case "Passing Year": hscPassingYear.setText(value); break;
+                }
+            }
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error loading student data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        admissionSessionGroup.clearSelection();
-        year.setSelectedIndex(0);
     }
+
 }
