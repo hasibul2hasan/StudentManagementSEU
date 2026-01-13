@@ -225,17 +225,6 @@ public class AddNewStudentForm extends JFrame {
         gbc.weightx = 0;
     }
 
-    private String getSelectedAdmissionSession() {
-        if (sprint.isSelected()) {
-            return "Sprint";
-        } else if (summer.isSelected()) {
-            return "Summer";
-        } else if (fall.isSelected()) {
-            return "Fall";
-        }
-        return "";
-    }
-
     private void saveStudentData() throws IOException {
         // Basic validation
         if (studentId.getText().trim().isEmpty() || fullName.getText().trim().isEmpty()) {

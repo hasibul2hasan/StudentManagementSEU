@@ -1,0 +1,27 @@
+--- Student Information ---
+UMS Serial: 9
+Student ID: 2024000000111
+Program Name: cse
+Batch: 66
+Admission Session: Fall
+Year: 2021
+
+--- Personal Data ---
+Full Name: aa
+NID/Passport: aa
+Gender: Male
+Marital Status: Single
+Religion: Islam
+Blood Group: A+
+
+--- Family/Guardian Information ---
+Father's Name: aa
+Occupation: a
+Mobile: a
+Mother's Name: a
+Occupation: 
+Mobile: 
+
+--- Address Information ---
+Present Address: aaa
+Permanent Address: aaa
